@@ -42,6 +42,7 @@ class BooksManagementViewModel(
             var r = list
             if (f.genre != null)    r = r.filter { it.genre.equals(f.genre, true) }
             if (f.language != null) r = r.filter { it.language.equals(f.language, true) }
+            r = r.filter { it.isActive == !f.showInactive }
             when (f.sort) {
                 SortOption.TITLE_ASC  -> r.sortedBy { it.title.lowercase() }
                 SortOption.TITLE_DESC -> r.sortedByDescending { it.title.lowercase() }

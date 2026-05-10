@@ -11,6 +11,7 @@ import com.example.adminlivria.common.bookServiceInstance
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
     private val repository: BooksRepository,
@@ -19,6 +20,21 @@ class BookDetailViewModel(
     val book: StateFlow<Book?> =
         repository.getBookById(bookId)
             .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    fun toggleActivation() {
+        val current = book.value ?: return
+        viewModelScope.launch {
+            try {
+                if (current.isActive) {
+                    repository.deactivateBook(bookId)
+                } else {
+                    repository.reactivateBook(bookId)
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("BookDetailVM", "Failed to toggle activation", e)
+            }
+        }
+    }
 }
 
 class BookDetailViewModelFactory(

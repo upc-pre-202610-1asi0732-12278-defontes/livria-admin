@@ -10,5 +10,6 @@ data class Book(
     val price: Double,
     val purchasePrice: Double,
     val stock: Int,
-    val cover: String
+    val cover: String,
+    val isActive: Boolean = true
 )

@@ -17,7 +17,7 @@ data class BookDto(
     val language: String
 )
 
-fun BookDto.toDomain() = Book(
+fun BookDto.toDomain(isActiveStatus: Boolean = true) = Book(
     id = id ?: 0,
     title = title,
     description = description,
@@ -27,5 +27,6 @@ fun BookDto.toDomain() = Book(
     price = salePrice ?: 0.0,
     purchasePrice = purchasePrice ?: 0.0,
     stock = stock,
-    cover = cover
+    cover = cover,
+    isActive = isActiveStatus
 )

@@ -31,15 +31,52 @@ class BooksRepository(
 
     suspend fun refreshBooks() {
         try {
-            val response = service.getAllBooks()
-            if (response.isSuccessful) {
-                val remoteBooks = response.body().orEmpty().map { it.toDomain() }
-                dao.replaceAll(remoteBooks.map { it.toEntity() })
+            val responseActive = service.getAllBooks()
+            val responseDeactivated = service.getDeactivatedBooks()
+
+            val allBooks = mutableListOf<Book>()
+
+            if (responseActive.isSuccessful) {
+                allBooks.addAll(responseActive.body().orEmpty().map { it.toDomain(isActiveStatus = true) })
             } else {
-                android.util.Log.e("BooksRepo", "HTTP ${response.code()} ${response.message()}")
+                android.util.Log.e("BooksRepo", "Active HTTP ${responseActive.code()} ${responseActive.message()}")
+            }
+
+            if (responseDeactivated.isSuccessful) {
+                allBooks.addAll(responseDeactivated.body().orEmpty().map { it.toDomain(isActiveStatus = false) })
+            } else {
+                android.util.Log.e("BooksRepo", "Deactivated HTTP ${responseDeactivated.code()} ${responseDeactivated.message()}")
+            }
+
+            if (allBooks.isNotEmpty() || (responseActive.isSuccessful && responseDeactivated.isSuccessful)) {
+                dao.replaceAll(allBooks.map { it.toEntity() })
             }
         } catch (e: Exception) {
             android.util.Log.e("BooksRepo", "refreshBooks error", e)
+        }
+    }
+
+    suspend fun deactivateBook(id: Int) {
+        val res = service.deactivateBook(id)
+        if (!res.isSuccessful) {
+            throw IllegalStateException("deactivateBook failed: ${res.code()} ${res.message()}")
+        }
+        val localBook = dao.getById(id).firstOrNull()
+        if (localBook != null) {
+            val deactivatedBook = localBook.copy(isActive = false)
+            dao.upsertAll(listOf(deactivatedBook))
+        }
+    }
+
+    suspend fun reactivateBook(id: Int) {
+        val res = service.reactivateBook(id)
+        if (!res.isSuccessful) {
+            throw IllegalStateException("reactivateBook failed: ${res.code()} ${res.message()}")
+        }
+        val localBook = dao.getById(id).firstOrNull()
+        if (localBook != null) {
+            val reactivatedBook = localBook.copy(isActive = true)
+            dao.upsertAll(listOf(reactivatedBook))
         }
     }
 

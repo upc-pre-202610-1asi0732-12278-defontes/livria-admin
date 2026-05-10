@@ -94,6 +94,24 @@ fun BookDetailScreen(
                     Text(b.description, style = MaterialTheme.typography.bodyMedium, color = LivriaBlack)
                 }
             }
+            
+            Spacer(Modifier.weight(1f))
+            
+            androidx.compose.material3.Button(
+                onClick = { viewModel.toggleActivation() },
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = if (b.isActive) androidx.compose.ui.graphics.Color(0xFFD32F2F) else androidx.compose.ui.graphics.Color(0xFF4CAF50),
+                    contentColor = LivriaWhite
+                )
+            ) {
+                Text(
+                    if (b.isActive) "DEACTIVATE BOOK" else "REACTIVATE BOOK",
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }

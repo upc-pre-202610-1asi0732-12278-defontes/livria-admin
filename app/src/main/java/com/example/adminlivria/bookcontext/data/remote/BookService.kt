@@ -16,4 +16,13 @@ interface BookService {
         @Path("bookId") bookId: Int,
         @Body body: StockUpdateRequest
     ): Response<BookDto>
+
+    @PATCH("books/{bookId}/deactivate")
+    suspend fun deactivateBook(@Path("bookId") bookId: Int): Response<Unit>
+
+    @PATCH("books/{bookId}/reactivate")
+    suspend fun reactivateBook(@Path("bookId") bookId: Int): Response<BookDto>
+
+    @GET("books/deactivated")
+    suspend fun getDeactivatedBooks(): Response<List<BookDto>>
 }

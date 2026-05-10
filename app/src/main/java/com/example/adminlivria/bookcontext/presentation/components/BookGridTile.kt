@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.background
 import com.example.adminlivria.common.components.BookCoverImage
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -34,15 +35,32 @@ fun BookGridTile(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            BookCoverImage(
-                cover = book.cover,
-                contentDescription = book.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(3f / 4f)
-                    .clip(RoundedCornerShape(12.dp))
-            )
+            Box {
+                BookCoverImage(
+                    cover = book.cover,
+                    contentDescription = book.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(3f / 4f)
+                        .clip(RoundedCornerShape(12.dp))
+                )
+                if (!book.isActive) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.5f), RoundedCornerShape(12.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "INACTIVE",
+                            color = LivriaWhite,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+            }
 
             Text(
                 text = book.title,

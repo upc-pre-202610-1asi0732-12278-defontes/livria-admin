@@ -11,7 +11,7 @@ import com.example.adminlivria.statscontext.data.local.StatsDao
 
 @Database(
     entities = [BookEntity::class, StatEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AdminDatabase : RoomDatabase() {

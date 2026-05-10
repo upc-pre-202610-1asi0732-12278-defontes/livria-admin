@@ -51,11 +51,17 @@ fun FiltersSheet(
             }, label = { Text("Z → A") })
         }
 
+        var showInactive by remember(initial.showInactive) { mutableStateOf(initial.showInactive) }
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            Text("Show Only Inactive Books", style = MaterialTheme.typography.bodyMedium)
+            Switch(checked = showInactive, onCheckedChange = { showInactive = it })
+        }
+
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedButton(onClick = onClear, modifier = Modifier.weight(1f)) { Text("Clear") }
             Button(
-                onClick = { onApply(BookFilters(selectedGenre, selectedLanguage, sort)) },
+                onClick = { onApply(BookFilters(selectedGenre, selectedLanguage, sort, showInactive)) },
                 modifier = Modifier.weight(1f)
             ) { Text("Apply") }
         }

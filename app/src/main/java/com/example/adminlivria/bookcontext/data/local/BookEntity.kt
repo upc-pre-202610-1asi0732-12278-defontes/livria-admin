@@ -15,12 +15,13 @@ data class BookEntity(
     val price: Double,
     val purchasePrice: Double,
     val stock: Int,
-    val cover: String
+    val cover: String,
+    val isActive: Boolean = true
 )
 
 fun BookEntity.toDomain() = Book(
-    id, title, description, author, genre, language, price, purchasePrice, stock, cover
+    id, title, description, author, genre, language, price, purchasePrice, stock, cover, isActive
 )
 fun Book.toEntity() = BookEntity(
-    id, title, description, author, genre, language, price, purchasePrice, stock, cover
+    id, title, description, author, genre, language, price, purchasePrice, stock, cover, isActive
 )
