@@ -26,9 +26,9 @@ class OrderRepository(
                     return@withContext Resource.Success(data = orders)
                 }
             }
-            return@withContext Resource.Error(response.errorBody()?.string() ?: "No orders available")
+            return@withContext Resource.Error("Parece que no hay conexión a internet. Revisa tu red.")
         } catch (e: Exception) {
-            return@withContext Resource.Error(e.message ?: "Error de red")
+            return@withContext Resource.Error("No pudimos conectarnos al servidor. Inténtalo más tarde.")
         }
     }
 
@@ -41,9 +41,9 @@ class OrderRepository(
                     return@withContext Resource.Success(data = order)
                 }
             }
-            return@withContext Resource.Error(response.errorBody()?.string() ?: "Order not found")
+            return@withContext Resource.Error("No se pudo encontrar esta orden. Es posible que haya sido eliminada.")
         } catch (e: Exception) {
-            return@withContext Resource.Error(e.message ?: "Network error")
+            return@withContext Resource.Error("Parece que no tienes conexión a internet. Verifica tu red y vuelve a intentar.")
         }
     }
 
@@ -56,10 +56,10 @@ class OrderRepository(
             if (response.isSuccessful) {
                 Resource.Success(Unit)
             } else {
-                Resource.Error(response.errorBody()?.string() ?: "Error updating order")
+                Resource.Error("Oops, no pudimos actualizar el estado de la orden. Inténtalo de nuevo.")
             }
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Network error")
+            Resource.Error("Parece que no tienes conexión a internet. Verifica tu red.")
         }
     }
 
@@ -82,12 +82,12 @@ class OrderRepository(
                         message = "No se encontraron órdenes para '$input'"
                     )
                 }
-                return@withContext Resource.Error(message = "El servidor devolvió una lista vacía.")
+                return@withContext Resource.Error(message = "Tuvimos un problema al cargar los datos de las órdenes.")
             }
-            return@withContext Resource.Error(message = "Error de API al buscar órdenes: ${response.message()}")
+            return@withContext Resource.Error(message = "No pudimos completar tu búsqueda. Inténtalo más tarde.")
 
         } catch (e: Exception) {
-            return@withContext Resource.Error(e.message ?: "Error de red al buscar órdenes")
+            return@withContext Resource.Error("Parece que no tienes conexión a internet. Verifica tu red y vuelve a intentar.")
         }
     }
 

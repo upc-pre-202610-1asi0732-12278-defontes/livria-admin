@@ -38,7 +38,7 @@ class HomeViewModel(
 
     private suspend fun loadAdminData() {
         if (adminId == 0) {
-            _uiState.update { it.copy(loadError = "Error: Sesión no válida.", isLoading = false) }
+            _uiState.update { it.copy(loadError = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", isLoading = false) }
             return
         }
 
@@ -75,14 +75,14 @@ class HomeViewModel(
                 }
             } else {
                 _uiState.update { it.copy(
-                    loadError = "No se pudieron cargar los datos. (Error ${response.code()})",
+                    loadError = "No pudimos obtener tu información en este momento. Inténtalo más tarde.",
                     isLoading = false
                 ) }
             }
         } catch (e: Exception) {
             val errorMsg = when (e) {
-                is HttpException -> "Error de servidor: ${e.message()}"
-                is IOException -> "Error de conexión. Verifique su red."
+                is HttpException -> "Estamos teniendo problemas técnicos con el servidor. Inténtalo más tarde."
+                is IOException -> "Parece que no tienes conexión a internet. Verifica tu red."
                 else -> "Ocurrió un error inesperado al cargar los datos."
             }
             _uiState.update { it.copy(loadError = errorMsg, isLoading = false) }

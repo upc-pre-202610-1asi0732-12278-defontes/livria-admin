@@ -65,11 +65,11 @@ class LoginViewModel(
                     false
                 }
             } else {
-                uiState = uiState.copy(error = "Credenciales incorrectas (Error ${response.code()})", isLoading = false, isAuthenticated = false)
+                uiState = uiState.copy(error = "Tus credenciales son incorrectas. Verifica tu información.", isLoading = false, isAuthenticated = false)
                 false
             }
         } catch (e: Exception) {
-            uiState = uiState.copy(error = "Error de conexión o inesperado.", isLoading = false, isAuthenticated = false)
+            uiState = uiState.copy(error = "Parece que no hay conexión a internet. Revisa tu red e intenta nuevamente.", isLoading = false, isAuthenticated = false)
             false
         }
     }

@@ -98,7 +98,7 @@ class AddBookViewModel(
                 val base64Image = convertUriToBase64(uiState.cover)
                 if (base64Image == null) {
                     uiState = uiState.copy(
-                        errorMessage = "No se pudo leer la imagen seleccionada.",
+                        errorMessage = "No pudimos procesar la imagen seleccionada. Intenta con otra.",
                         isLoading = false
                     )
                     return@launch
@@ -117,18 +117,17 @@ class AddBookViewModel(
 
                 if (response.isSuccessful) {
                     uiState = AddBookUiState(
-                        successMessage = "Libro '${uiState.title}' creado con éxito!"
+                        successMessage = "¡El libro '${uiState.title}' se agregó a tu inventario con éxito!"
                     )
                 } else {
-                    val errorBody = response.errorBody()?.string() ?: "Error desconocido del servidor."
                     uiState = uiState.copy(
-                        errorMessage = "Fallo al crear libro: ${response.code()}. $errorBody",
+                        errorMessage = "Oops, no pudimos guardar el libro. Verifica la información e inténtalo de nuevo.",
                         isLoading = false
                     )
                 }
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    errorMessage = "Error de conexión: ${e.message}",
+                    errorMessage = "Parece que no tienes conexión a internet. Verifica tu red y vuelve a intentar.",
                     isLoading = false
                 )
             }

@@ -75,7 +75,7 @@ class StatsViewModel(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error al cargar estadísticas: ${e.localizedMessage ?: "Verifica la base de datos."}"
+                        errorMessage = "No pudimos cargar las estadísticas en este momento. Inténtalo más tarde."
                     )
                 }
             }

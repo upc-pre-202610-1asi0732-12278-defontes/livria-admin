@@ -98,7 +98,7 @@ class SettingsViewModel(
         val adminId = tokenManager.getAdminId()
 
         if (adminId == 0) {
-            _uiState.update { it.copy(initialLoadError = "Error: Sesión no válida. Por favor, vuelva a iniciar sesión.", isLoading = false) }
+            _uiState.update { it.copy(initialLoadError = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", isLoading = false) }
             return
         }
 
@@ -124,14 +124,14 @@ class SettingsViewModel(
                     _uiState.update { it.copy(initialLoadError = "No hay datos de admin.", isLoading = false) }
                 }
             } else {
-                _uiState.update { it.copy(initialLoadError = "No se pudieron cargar los datos. (Error ${response.code()})", isLoading = false) }
+                _uiState.update { it.copy(initialLoadError = "No pudimos obtener tu información en este momento. Inténtalo más tarde.", isLoading = false) }
             }
         } catch (e: Exception) {
             Log.d(TAG, "Exception en loadAdminData: ${e.message}", e)
             val errorMsg = when (e) {
-                is retrofit2.HttpException -> "Error de servidor: ${e.message()}"
-                is java.io.IOException -> "Error de conexión"
-                else -> "Error inesperado"
+                is retrofit2.HttpException -> "Estamos teniendo problemas técnicos. Inténtalo más tarde."
+                is java.io.IOException -> "Parece que no tienes conexión a internet. Verifica tu red."
+                else -> "Ocurrió un error inesperado al cargar tus datos."
             }
             _uiState.update { it.copy(initialLoadError = errorMsg, isLoading = false) }
         }
@@ -139,7 +139,7 @@ class SettingsViewModel(
 
     fun saveChanges() {
         if (adminId == 0 || uiState.value.display.isBlank() || uiState.value.username.isBlank() || uiState.value.email.isBlank() || uiState.value.securityPin.isBlank()) {
-            _uiState.update { it.copy(saveError = "Datos incompletos o sesión inválida.") }
+            _uiState.update { it.copy(saveError = "Por favor completa todos tus datos antes de guardar.") }
             return
         }
 
@@ -163,8 +163,7 @@ class SettingsViewModel(
                 if (response.isSuccessful) {
                     _uiState.update { it.copy(isSaving = false, saveSuccess = true, saveError = null) }
                 } else {
-                    val errorMsg = response.errorBody()?.string() ?: "Error desconocido al guardar."
-                    _uiState.update { it.copy(isSaving = false, saveSuccess = false, saveError = "Error ${response.code()}: $errorMsg") }
+                    _uiState.update { it.copy(isSaving = false, saveSuccess = false, saveError = "No pudimos guardar tus cambios. Verifica la información e inténtalo de nuevo.") }
                 }
 
                 if (uiState.value.saveSuccess) {
@@ -174,9 +173,9 @@ class SettingsViewModel(
 
             } catch (e: Exception) {
                 val errorMsg = when (e) {
-                    is HttpException -> "Error de servidor al guardar: ${e.message()}"
-                    is IOException -> "Error de conexión al guardar. Verifique su red."
-                    else -> "Ocurrió un error inesperado al guardar los datos."
+                    is HttpException -> "Tuvimos un problema técnico al guardar. Inténtalo más tarde."
+                    is IOException -> "Parece que no tienes conexión a internet. Verifica tu red y vuelve a intentar."
+                    else -> "Ocurrió un error inesperado al guardar."
                 }
                 _uiState.update { it.copy(isSaving = false, saveSuccess = false, saveError = errorMsg) }
             }
