@@ -2,7 +2,9 @@
 package com.example.adminlivria.bookcontext.presentation.stock
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import com.example.adminlivria.common.components.BookCoverImage
 import com.example.adminlivria.bookcontext.domain.Book
 import com.example.adminlivria.common.ui.theme.*
 import com.example.adminlivria.profilecontext.presentation.SettingsViewModel
@@ -36,7 +38,10 @@ fun StockScreen(
     val b: Book = book!!
 
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 12.dp),
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
@@ -46,12 +51,13 @@ fun StockScreen(
         )
 
 
-        AsyncImage(
-            model = b.cover,
+        BookCoverImage(
+            cover = b.cover,
             contentDescription = b.title,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .height(240.dp)
+                .aspectRatio(3f / 4f)
         )
 
 
