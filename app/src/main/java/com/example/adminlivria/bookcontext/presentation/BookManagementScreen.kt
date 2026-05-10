@@ -136,11 +136,12 @@ fun BooksScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(IntrinsicSize.Max)
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     for (book in rowBooks) {
-                        Box(modifier = Modifier.weight(1f)) {
+                        Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
                             BookGridTile(
                                 book = book,
                                 onView = { navController.navigate("${NavDestinations.BOOK_DETAIL_ROUTE}/${book.id}") },

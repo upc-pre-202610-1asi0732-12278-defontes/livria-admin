@@ -27,7 +27,7 @@ fun BookGridTile(
         colors = CardDefaults.cardColors(containerColor = LivriaWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -62,6 +62,8 @@ fun BookGridTile(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+
+            Spacer(modifier = Modifier.weight(1f))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
