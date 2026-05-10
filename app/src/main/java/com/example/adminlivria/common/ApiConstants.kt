@@ -81,6 +81,10 @@ val userAdminServiceInstance: UserAdminService by lazy {
     retrofit.create(UserAdminService::class.java)
 }
 
+val userClientServiceInstance: com.example.adminlivria.clientscontext.data.remote.UserClientService by lazy {
+    retrofit.create(com.example.adminlivria.clientscontext.data.remote.UserClientService::class.java)
+}
+
 val bookServiceInstance: BookService by lazy {
     retrofit.create(BookService::class.java)
 }

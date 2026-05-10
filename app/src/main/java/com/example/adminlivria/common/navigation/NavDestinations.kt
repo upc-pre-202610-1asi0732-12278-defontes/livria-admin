@@ -15,4 +15,5 @@ object NavDestinations {
     const val INVENTORY_INDIVIDUAL_STOCK_ROUTE = "inventory_individual_stock"
     const val STATISTICS_ROUTE = "statistics"
     const val SETTINGS_PROFILE_ROUTE = "settings_profile"
+    const val USER_CLIENT_LIST_ROUTE = "user_client_list"
 }

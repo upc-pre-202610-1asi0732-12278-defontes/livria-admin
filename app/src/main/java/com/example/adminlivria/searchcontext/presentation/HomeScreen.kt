@@ -51,6 +51,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.adminlivria.profilecontext.data.local.TokenManager
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.Icons
 import com.example.adminlivria.profilecontext.data.remote.UserAdminService
 
 @Composable
@@ -196,6 +198,12 @@ fun HomeScreen(
                                 icon = painterResource(id = R.drawable.ic_settings),
                                 label = "Settings",
                                 onClick = { navController.navigate(NavDestinations.SETTINGS_PROFILE_ROUTE) }
+                            )
+                            QuickActionButton(
+                                modifier = Modifier.weight(1f),
+                                icon = androidx.compose.ui.graphics.vector.rememberVectorPainter(androidx.compose.material.icons.Icons.Default.Person),
+                                label = "User List",
+                                onClick = { navController.navigate(NavDestinations.USER_CLIENT_LIST_ROUTE) }
                             )
                         }
                     }

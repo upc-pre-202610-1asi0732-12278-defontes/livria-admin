@@ -205,8 +205,13 @@ fun AdminNavGraph(
                     bookId = id,
                     settingsViewModel = settingsViewModel
                 )
-            }        }
+            }
+            
+            composable(route = NavDestinations.USER_CLIENT_LIST_ROUTE) {
+                com.example.adminlivria.clientscontext.presentation.UserClientListScreen(
+                    navController = navController
+                )
+            }
+        }
     }
-
-
 }
