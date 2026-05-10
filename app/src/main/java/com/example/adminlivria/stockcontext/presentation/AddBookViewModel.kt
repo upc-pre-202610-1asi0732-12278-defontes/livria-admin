@@ -51,11 +51,17 @@ class AddBookViewModel(
     var uiState by mutableStateOf(AddBookUiState())
         private set
 
-    fun onTitleChange(value: String) { uiState = uiState.copy(title = value) }
-    fun onDescriptionChange(value: String) { uiState = uiState.copy(description = value) }
-    fun onAuthorChange(value: String) { uiState = uiState.copy(author = value) }
+    fun onTitleChange(value: String) { 
+        if (value.length <= 255) uiState = uiState.copy(title = value) 
+    }
+    fun onDescriptionChange(value: String) { 
+        if (value.length <= 1000) uiState = uiState.copy(description = value) 
+    }
+    fun onAuthorChange(value: String) { 
+        if (value.length <= 100) uiState = uiState.copy(author = value) 
+    }
     fun onStockChange(value: String) {
-        if (value.all { it.isDigit() } || value.isEmpty()) {
+        if ((value.all { it.isDigit() } || value.isEmpty()) && value.length <= 5) {
             uiState = uiState.copy(stock = value)
         }
     }
