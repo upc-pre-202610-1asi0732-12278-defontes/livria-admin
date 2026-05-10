@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import com.example.adminlivria.common.components.BookCoverImage
 import com.example.adminlivria.statscontext.domain.model.CapitalFlowData
 
 val OrangePrimary = Color(0xFFF96D00)
@@ -119,8 +119,8 @@ fun BookStatCard(book: BookStatsUi) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            AsyncImage(
-                model = book.imageUrl,
+            BookCoverImage(
+                cover = book.imageUrl,
                 contentDescription = book.title,
                 modifier = Modifier.size(80.dp)
             )
