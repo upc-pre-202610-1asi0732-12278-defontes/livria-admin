@@ -3,12 +3,14 @@ package com.example.adminlivria.profilecontext.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -76,9 +78,11 @@ fun LoginScreen(
 
                 OutlinedTextField(
                     value = uiState.username,
-                    onValueChange = viewModel::onUsernameChange,
+                    onValueChange = { if (it.length <= 50) viewModel.onUsernameChange(it) },
                     label = { Text("Username", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal, fontSize = 14.sp)) },
                     textStyle = MaterialTheme.typography.bodyMedium.copy(color = LivriaBlack),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = LivriaWhite, unfocusedContainerColor = LivriaWhite,
                         disabledContainerColor = LivriaWhite, focusedTextColor = LivriaBlack,
@@ -91,9 +95,10 @@ fun LoginScreen(
 
                 OutlinedTextField(
                     value = uiState.password,
-                    onValueChange = viewModel::onPasswordChange,
+                    onValueChange = { if (it.length <= 100) viewModel.onPasswordChange(it) },
                     label = { Text("Password", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal, fontSize = 14.sp)) },
                     visualTransformation = PasswordVisualTransformation(),
+                    singleLine = true,
                     textStyle = MaterialTheme.typography.bodyMedium.copy(color = LivriaBlack),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = LivriaWhite, unfocusedContainerColor = LivriaWhite,
@@ -107,9 +112,14 @@ fun LoginScreen(
 
                 OutlinedTextField(
                     value = uiState.securityPin,
-                    onValueChange = viewModel::onSecurityPinChange,
+                    onValueChange = { input ->
+                        if (input.length <= 4 && input.all { it.isDigit() })
+                            viewModel.onSecurityPinChange(input)
+                    },
                     label = { Text("Security Pin", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal, fontSize = 14.sp)) },
                     visualTransformation = PasswordVisualTransformation(),
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     textStyle = MaterialTheme.typography.bodyMedium.copy(color = LivriaBlack),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = LivriaWhite, unfocusedContainerColor = LivriaWhite,
@@ -121,16 +131,22 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 30.dp, vertical = 15.dp)
                 )
 
-                uiState.error?.let { errorMessage ->
-                    Text(
-                        text = errorMessage,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
-                    )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(horizontal = 30.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (uiState.error != null) {
+                        Text(
+                            text = uiState.error,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
-
-                Spacer(modifier = Modifier.height(50.dp))
 
                 Button(
                     onClick = {
