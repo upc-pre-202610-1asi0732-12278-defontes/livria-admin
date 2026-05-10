@@ -102,7 +102,7 @@ class AddBookViewModel(
                     description = uiState.description,
                     author = uiState.author,
                     stock = uiState.stock.toInt(),
-                    cover = uiState.cover,
+                    cover = "data:image/jpeg;base64,$base64Image",
                     genre = uiState.genre,
                     language = uiState.language
                 )

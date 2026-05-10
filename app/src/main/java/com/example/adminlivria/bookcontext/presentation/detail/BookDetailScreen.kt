@@ -30,7 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
+import com.example.adminlivria.common.components.BookCoverImage
 import com.example.adminlivria.common.ui.theme.AsapCondensedFontFamily
 import com.example.adminlivria.common.ui.theme.LivriaAmber
 import com.example.adminlivria.common.ui.theme.LivriaBlack
@@ -69,8 +69,8 @@ fun BookDetailScreen(
                 )
             )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                AsyncImage(
-                    model = b.cover,
+                BookCoverImage(
+                    cover = b.cover,
                     contentDescription = b.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

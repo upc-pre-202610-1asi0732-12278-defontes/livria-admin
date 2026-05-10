@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
+import com.example.adminlivria.common.components.BookCoverImage
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.adminlivria.bookcontext.domain.Book
@@ -34,8 +34,8 @@ fun BookGridTile(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            AsyncImage(
-                model = book.cover,
+            BookCoverImage(
+                cover = book.cover,
                 contentDescription = book.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

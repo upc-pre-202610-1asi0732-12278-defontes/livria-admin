@@ -20,7 +20,9 @@ import com.example.adminlivria.common.data.local.AdminDatabase
 import com.example.adminlivria.statscontext.data.local.StatsDao
 import com.example.adminlivria.statscontext.data.repository.StatsRepository
 
-const val BASE_URL = "https://lililivria.azurewebsites.net/api/v1/"
+// const val BASE_URL = "https://lililivria.azurewebsites.net/api/v1/" // Producción
+// const val BASE_URL = "http://10.0.2.2:5119/api/v1/"               // Emulador virtual Android Studio
+const val BASE_URL = "http://192.168.18.8:5119/api/v1/"              // Celular físico
 
 private lateinit var tokenManager: TokenManager
 
