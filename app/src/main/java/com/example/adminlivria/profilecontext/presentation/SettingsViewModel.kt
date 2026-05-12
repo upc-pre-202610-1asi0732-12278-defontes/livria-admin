@@ -46,13 +46,6 @@ class SettingsViewModel(
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
     private val adminId: Int = tokenManager.getAdminId()
-
-    init {
-
-        viewModelScope.launch {
-            loadAdminData()
-        }
-    }
     fun spend(amount: Double) {
         if (amount <= 0) return
         val current = _uiState.value.capital

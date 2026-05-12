@@ -88,6 +88,14 @@ fun AdminNavGraph(
 
     val showBars = currentRoute != NavDestinations.LOGIN_ROUTE
 
+    // Una sola carga: al iniciar sesión (token) y al cambiar de pantalla (capital puede venir del servidor).
+    LaunchedEffect(tokenManager.getToken(), currentRoute) {
+        if (!showBars) return@LaunchedEffect
+        val token = tokenManager.getToken()
+        if (!token.isNullOrBlank()) {
+            settingsViewModel.loadAdminData()
+        }
+    }
 
     val booksViewModel: BooksManagementViewModel = viewModel(
         factory = BooksViewModelFactory(context)
@@ -104,8 +112,7 @@ fun AdminNavGraph(
                 LivriaTopBar(
                     navController = navController,
                     currentRoute = currentRoute,
-                    userAdminService = userAdminServiceInstance,
-                    tokenManager = tokenManager
+                    settingsViewModel = settingsViewModel
                 )
             }
         },
@@ -149,12 +156,6 @@ fun AdminNavGraph(
 
 
             composable(route = NavDestinations.SETTINGS_PROFILE_ROUTE) {
-                val settingsViewModelFactory = SettingsViewModelFactory(
-                    userAdminService = userAdminServiceInstance,
-                    tokenManager = tokenManager
-                )
-                val settingsViewModel: SettingsViewModel = viewModel(factory = settingsViewModelFactory)
-
                 SettingsScreen(
                     viewModel = settingsViewModel,
                     onLogout = {

@@ -1,6 +1,5 @@
 package com.example.adminlivria.common.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,57 +8,31 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.adminlivria.R
 import com.example.adminlivria.common.navigation.NavDestinations
 import com.example.adminlivria.common.ui.theme.*
-import com.example.adminlivria.profilecontext.data.local.TokenManager
 import com.example.adminlivria.profilecontext.presentation.SettingsViewModel
-import com.example.adminlivria.profilecontext.presentation.SettingsViewModelFactory
-import com.example.adminlivria.profilecontext.data.remote.UserAdminService
 
+/**
+ * Muestra el capital del admin. Debe recibir el mismo [settingsViewModel] que el resto del grafo
+ * (p. ej. StockScreen) para que [SettingsViewModel.spend] y la API reflejen el mismo estado.
+ */
 @Composable
 fun LivriaTopBar(
     navController: NavController,
     currentRoute: String?,
-    userAdminService: UserAdminService,
-    tokenManager: TokenManager
+    settingsViewModel: SettingsViewModel
 ) {
-    val TAG = "LivriaTopBar"
-
-    val factory = remember {
-        SettingsViewModelFactory(
-            userAdminService = userAdminService,
-            tokenManager = tokenManager
-        )
-    }
-    val settingsViewModel: SettingsViewModel = viewModel(factory = factory)
     val settingsState by settingsViewModel.uiState.collectAsState()
-
-    LaunchedEffect(key1 = tokenManager.getToken()) {
-        val token = tokenManager.getToken()
-        Log.d("LivriaTopBar", "token changed in TopBar -> $token ; VM=${settingsViewModel.hashCode()}")
-        if (token != null && token.isNotBlank()) {
-
-            settingsViewModel.loadAdminData()
-            Log.d("LivriaTopBar", "TopBar requested loadAdminData() on VM=${settingsViewModel.hashCode()}")
-        }
-    }
-
-    LaunchedEffect(settingsState.capital) {
-        Log.d(TAG, "TopBar VM=${settingsViewModel.hashCode()} capital changed => ${settingsState.capital}")
-    }
 
     val isSettingsSelected = currentRoute == NavDestinations.SETTINGS_PROFILE_ROUTE
     val currentCapital = String.format("%.2f", settingsState.capital)
