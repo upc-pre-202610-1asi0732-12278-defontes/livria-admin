@@ -9,5 +9,7 @@ data class UserClientDto(
     @SerializedName("email") val email: String,
     @SerializedName("icon") val icon: String?,
     @SerializedName("phrase") val phrase: String?,
-    @SerializedName("subscription") val subscription: String?
+    @SerializedName("subscription") val subscription: String?,
+    @SerializedName("planChangeDate") val planChangeDate: String?,
+    @SerializedName("hasPayed") val hasPayed: Boolean?
 )

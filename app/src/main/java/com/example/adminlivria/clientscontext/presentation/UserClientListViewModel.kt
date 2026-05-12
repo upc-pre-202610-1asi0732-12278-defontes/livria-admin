@@ -32,21 +32,46 @@ class UserClientListViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             when (val result = repository.getAllUserClients()) {
-                is Resource.Success -> {
-                    _uiState.update { 
-                        it.copy(
-                            isLoading = false,
-                            clients = result.data ?: emptyList()
-                        ) 
+                is Resource.Success -> _uiState.update {
+                    it.copy(isLoading = false, clients = result.data ?: emptyList())
+                }
+                is Resource.Error -> _uiState.update {
+                    it.copy(isLoading = false, errorMessage = result.message)
+                }
+            }
+        }
+    }
+
+    fun toggleHasPayed(client: UserClient) {
+        viewModelScope.launch {
+            val newValue = !client.hasPayed
+            when (val result = repository.updateHasPayed(client.id, newValue)) {
+                is Resource.Success -> result.data?.let { updated ->
+                    _uiState.update { state ->
+                        state.copy(
+                            clients = state.clients.map { if (it.id == updated.id) updated else it }
+                        )
                     }
                 }
-                is Resource.Error -> {
-                    _uiState.update { 
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = result.message
-                        ) 
+                is Resource.Error -> _uiState.update {
+                    it.copy(errorMessage = result.message)
+                }
+            }
+        }
+    }
+
+    fun updateSubscription(client: UserClient, newPlan: String) {
+        viewModelScope.launch {
+            when (val result = repository.updateSubscription(client.id, newPlan)) {
+                is Resource.Success -> result.data?.let { updated ->
+                    _uiState.update { state ->
+                        state.copy(
+                            clients = state.clients.map { if (it.id == updated.id) updated else it }
+                        )
                     }
+                }
+                is Resource.Error -> _uiState.update {
+                    it.copy(errorMessage = result.message)
                 }
             }
         }

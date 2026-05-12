@@ -7,5 +7,7 @@ data class UserClient(
     val email: String,
     val icon: String,
     val phrase: String,
-    val subscription: String
+    val subscription: String,
+    val planChangeDate: String,
+    val hasPayed: Boolean
 )
