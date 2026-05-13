@@ -7,14 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adminlivria.stockcontext.data.model.CreateBookRequest
+import com.example.adminlivria.stockcontext.data.remote.BookCoverCloudinary
 import com.example.adminlivria.stockcontext.data.remote.InventoryService
-import android.util.Base64
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import android.net.Uri
-import androidx.core.net.toUri
-
 
 object BookOptions {
     val LANGUAGE_OPTIONS = listOf("español", "english")
@@ -95,10 +90,10 @@ class AddBookViewModel(
 
         viewModelScope.launch {
             try {
-                val base64Image = convertUriToBase64(uiState.cover)
-                if (base64Image == null) {
+                val coverUrl = BookCoverCloudinary.uploadGalleryCover(context, uiState.cover)
+                if (coverUrl.isNullOrBlank()) {
                     uiState = uiState.copy(
-                        errorMessage = "No pudimos procesar la imagen seleccionada. Intenta con otra.",
+                        errorMessage = "No pudimos subir la portada (Cloudinary). Revisa la conexión o intenta con otra imagen.",
                         isLoading = false
                     )
                     return@launch
@@ -108,7 +103,7 @@ class AddBookViewModel(
                     description = uiState.description,
                     author = uiState.author,
                     stock = uiState.stock.toInt(),
-                    cover = "data:image/jpeg;base64,$base64Image",
+                    cover = coverUrl,
                     genre = uiState.genre,
                     language = uiState.language
                 )
@@ -131,23 +126,6 @@ class AddBookViewModel(
                     isLoading = false
                 )
             }
-        }
-    }
-
-    private suspend fun convertUriToBase64(uriString: String): String? = withContext(Dispatchers.IO) {
-        if (uriString.isBlank()) return@withContext null
-
-        return@withContext try {
-            val contentResolver = context.contentResolver
-            val inputStream = contentResolver.openInputStream(uriString.toUri())
-
-            inputStream?.use { stream ->
-                val bytes = stream.readBytes()
-                Base64.encodeToString(bytes, Base64.NO_WRAP)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
 
