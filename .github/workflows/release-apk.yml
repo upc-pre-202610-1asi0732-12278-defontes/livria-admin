@@ -7,6 +7,8 @@ on:
   push:
     tags:
       - 'v*'
+  # Para probar CI sin crear tag (pestaña Actions → Release Admin APK → Run workflow)
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -23,6 +25,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      # Sin esto, ./gradlew suele fallar en ubuntu-latest: no hay Android SDK en el runner.
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
+          packages: >-
+            platform-tools
+            platforms;android-36
 
       - name: Gradle cache
         uses: actions/cache@v4

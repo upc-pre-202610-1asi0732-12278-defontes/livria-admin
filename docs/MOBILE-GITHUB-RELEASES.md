@@ -6,7 +6,14 @@ Al pushear un tag **`v*`** (ej. `v1.0.0`), el workflow **Release Admin APK** com
 
 1. Código del repo en GitHub.
 2. **Settings → Actions → General → Workflow permissions** → **Read and write** (si la organización lo permite). Si no, usá un PAT en un secret y `token: ${{ secrets.GH_RELEASE_TOKEN }}` en el paso del release (igual que en livria-user).
-3. Si la org restringe acciones externas, permití **`softprops/action-gh-release`** o equivalente.
+3. Si la org restringe acciones externas, permití **`softprops/action-gh-release`**, **`android-actions/setup-android`** y las de **`actions/*`** que use el workflow.
+
+## Si el workflow falla
+
+1. **Sin Android SDK en el runner:** el workflow instala el SDK con `android-actions/setup-android`. Si la org **no permite** esa acción, el job fallará: pedí que la añadan a la lista permitida.
+2. **`google-services.json`:** debe existir en el repo en `app/google-services.json` (o generarlo en CI con un secret en base64).
+3. **Token solo lectura:** usá PAT `GH_RELEASE_TOKEN` y en el YAML del paso *GitHub Release* → `token: ${{ secrets.GH_RELEASE_TOKEN }}`.
+4. **Probar sin tag:** **Actions** → **Release Admin APK** → **Run workflow** (`workflow_dispatch`).
 
 ## Publicar una versión
 
