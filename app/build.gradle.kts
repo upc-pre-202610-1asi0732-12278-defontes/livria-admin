@@ -14,8 +14,8 @@ android {
         applicationId = "com.example.adminlivria"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.4"
 
         val apiBaseRaw = System.getenv("API_BASE")?.trim()
             ?: (project.findProperty("API_BASE") as String?)?.trim()
