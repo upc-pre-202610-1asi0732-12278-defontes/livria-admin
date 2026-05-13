@@ -23,6 +23,10 @@ android {
 
     buildTypes {
         release {
+            // Firma con debug: el APK release se puede instalar sin keystore de producción.
+            // (Sin esto suele generarse unsigned y el sistema muestra "App not installed".)
+            // Para Play Store: signingConfig = signingConfigs.getByName("release") + keystore.
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
