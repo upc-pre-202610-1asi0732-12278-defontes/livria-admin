@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,8 +21,8 @@ android {
 
         val apiBaseRaw = System.getenv("API_BASE")?.trim()
             ?: (project.findProperty("API_BASE") as String?)?.trim()
-            ?: rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use {
-                java.util.Properties().apply { load(it) }.getProperty("API_BASE")?.trim()
+            ?: rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { stream ->
+                Properties().apply { load(stream) }.getProperty("API_BASE")?.trim()
             }
             ?: ""
         val apiHost = apiBaseRaw.trimEnd('/').let { if (it.isEmpty()) "https://livriabackend-g5afdubmcxfacjbe.chilecentral-01.azurewebsites.net" else it }
