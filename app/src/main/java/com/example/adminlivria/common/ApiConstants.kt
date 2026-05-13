@@ -14,16 +14,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+import com.example.adminlivria.BuildConfig
 import com.example.adminlivria.bookcontext.data.remote.BookService
 import com.example.adminlivria.bookcontext.data.repository.BooksRepository
 import com.example.adminlivria.common.data.local.AdminDatabase
 import com.example.adminlivria.statscontext.data.local.StatsDao
 import com.example.adminlivria.statscontext.data.repository.StatsRepository
 
-// const val BASE_URL = "http://10.0.2.2:5119/api/v1/"               // Emulador → backend local
-// const val BASE_URL = "http://192.168.1.42:5119/api/v1/"           // Dispositivo físico → PC en LAN
-const val BASE_URL =
-    "https://livriabackend-g5afdubmcxfacjbe.chilecentral-01.azurewebsites.net/api/v1/"
+// Origen del API: BuildConfig.BASE_URL (Gradle). Mismo host que livria-user (secret API_BASE en CI).
+// Local: en `local.properties` → API_BASE=http://10.0.2.2:5119  (emulador) o tu IP LAN; sin `/api/v1` ni barra final.
+// O: ./gradlew -PAPI_BASE=http://127.0.0.1:5119 assembleDebug
+val BASE_URL: String = BuildConfig.BASE_URL
 
 private lateinit var tokenManager: TokenManager
 

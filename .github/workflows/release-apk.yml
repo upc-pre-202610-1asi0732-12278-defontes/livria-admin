@@ -1,5 +1,7 @@
 # Publica el APK de Admin en GitHub Releases al pushear un tag v* (ej. v1.0.0).
 # Requiere: Settings → Actions → General → Workflow permissions → Read and write.
+# Requiere: secret API_BASE (mismo que livria-user): host del backend sin /api/v1 ni barra final
+#   (ej. https://livriabackend-....azurewebsites.net).
 
 name: Release Admin APK
 
@@ -49,6 +51,8 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Release APK
+        env:
+          API_BASE: ${{ secrets.API_BASE }}
         run: ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Stage APK for release

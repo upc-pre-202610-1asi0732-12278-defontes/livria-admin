@@ -17,6 +17,20 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val apiBaseRaw = System.getenv("API_BASE")?.trim()
+            ?: (project.findProperty("API_BASE") as String?)?.trim()
+            ?: rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use {
+                java.util.Properties().apply { load(it) }.getProperty("API_BASE")?.trim()
+            }
+            ?: ""
+        val apiHost = apiBaseRaw.trimEnd('/').let { if (it.isEmpty()) "https://livriabackend-g5afdubmcxfacjbe.chilecentral-01.azurewebsites.net" else it }
+        val baseUrl = when {
+            apiHost.endsWith("/api/v1", ignoreCase = true) ->
+                if (apiHost.endsWith("/")) apiHost else "$apiHost/"
+            else -> "$apiHost/api/v1/"
+        }
+        fun escapeForBuildConfig(s: String) = s.replace("\\", "\\\\").replace("\"", "\\\"")
+        buildConfigField("String", "BASE_URL", "\"${escapeForBuildConfig(baseUrl)}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
