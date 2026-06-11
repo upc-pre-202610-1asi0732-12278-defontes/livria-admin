@@ -120,5 +120,14 @@ class BooksRepositoryTest {
         ): Response<com.example.adminlivria.bookcontext.data.remote.BookDto> {
             throw NotImplementedError("Este método no se usa en este test.")
         }
+        override suspend fun deactivateBook(bookId: Int): Response<Unit> {
+            throw NotImplementedError("Este método no se usa en este test.")
+        }
+        override suspend fun reactivateBook(bookId: Int): Response<com.example.adminlivria.bookcontext.data.remote.BookDto> {
+            throw NotImplementedError("Este método no se usa en este test.")
+        }
+        override suspend fun getDeactivatedBooks(): Response<List<com.example.adminlivria.bookcontext.data.remote.BookDto>> {
+            throw NotImplementedError("Este método no se usa en este test.")
+        }
     }
 }
